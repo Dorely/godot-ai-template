@@ -43,11 +43,13 @@ Official references:
 ## C# In Godot
 
 - Use the .NET build of the Godot editor for C# projects.
+- When bootstrapping or updating a C# project file, match the `Godot.NET.Sdk` package version to the connected Godot editor version.
 - Match C# script class names to file names for attached scripts.
 - Use `[Export]` properties for values designers or future editor automation should tune through the Inspector.
 - Export typed node references or `NodePath` values instead of hard-coding parent-specific paths inside reusable child scenes.
 - Remember that some string-based Godot APIs expect engine `snake_case` names. Prefer exposed `PropertyName`, `MethodName`, and `SignalName` constants when available.
 - Reassign value-type properties after editing copies, such as `Position = Position with { X = 100.0f };`.
+- Commit Godot-generated `.cs.uid` sidecars with their matching `.cs` files unless repo-local guidance says otherwise.
 - Follow Godot's C# style where local convention is absent: UTF-8, LF endings, 4 spaces, Allman braces, PascalCase members/types, camelCase locals/parameters, and `_privateField` names.
 - Be aware of platform limits for C# projects, especially lack of Godot 4 web export support.
 

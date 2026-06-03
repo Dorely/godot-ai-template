@@ -23,7 +23,7 @@ Use this skill to work safely in Godot projects through the Godot AI MCP server 
 - **Properties**: call `node_get_properties` before `node_set_property`; use exact Godot property names and scene paths, not guessed names.
 - **Grouped scene edits**: use `batch_execute` for related node/property/script operations that should succeed or fail together.
 - **Resources and assets**: use `resource_manage`, `material_manage`, `theme_manage`, `audio_manage`, `particle_manage`, and `filesystem_manage` when the editor should import, save, assign, or inspect resources.
-- **Gameplay scripts**: for C# projects, write `.cs` files directly with normal code-editing tools, let Godot import/build them, then attach or wire them with MCP if needed. `script_create` and `script_patch` are GDScript-only because they require `.gd`; `script_attach` can attach an already imported script resource.
+- **Gameplay scripts**: for C# projects, write `.cs` files directly with normal code-editing tools, let Godot import/build them, then attach or wire them with MCP if needed; see the workflow reference for C# bootstrap and runtime verification. `script_create` and `script_patch` are GDScript-only because they require `.gd`; `script_attach` can attach an already imported script resource.
 - **Input, signals, and globals**: use `input_map_manage`, `signal_manage`, and `autoload_manage` instead of editing `project.godot` or scene connection data by hand.
 - **Runtime inspection**: use `project_run`, `project_manage stop`, `game_manage`, and `logs_read` when validating behavior in the running game.
 - **Visual verification**: use `editor_screenshot` for editor/game/camera views when scene layout or rendering matters.
