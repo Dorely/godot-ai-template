@@ -13,11 +13,13 @@
 | `.gitattributes` | Normalizes text files to LF line endings when the repo is under Git. |
 | `.gitignore` | Ignores Godot-generated editor/cache output such as `.godot/`. |
 | `AGENTS.md` | Stable workflow and coding guidance for AI agents and contributors. |
+| `demo-platformer.csproj` | Godot C# project file using `Godot.NET.Sdk/4.6.3`. |
+| `demo-platformer.sln` | Solution file containing the Godot C# project. |
 | `FILEMAP.md` | This file; concise map of the repository structure. |
 | `VISION.md` | Intentionally small statement of the demo/workflow-validation goal. |
 | `icon.svg` | Default Godot project icon source asset. |
 | `icon.svg.import` | Godot import metadata for `icon.svg`. |
-| `project.godot` | Godot project settings; enables the Godot AI addon and `_mcp_game_helper` autoload. |
+| `project.godot` | Godot project settings; enables C#, the Godot AI addon, `_mcp_game_helper`, input actions, and the main scene. |
 
 ## Local AI Configuration
 
@@ -64,6 +66,10 @@
 
 ## Project-Owned Source
 
-No project-owned gameplay scenes, scripts, resources, tests, or assets exist yet.
-
-When they are added, document them here using concise entries grouped by directory.
+| Path | Description |
+|------|-------------|
+| `scenes/` | Project-owned Godot scenes. |
+| `scenes/demo_platformer.tscn` | First playable 2D blockout scene with a cube player, floor, side walls, and three platforms. |
+| `scripts/` | Project-owned C# gameplay scripts. |
+| `scripts/PlayerController.cs` | `CharacterBody2D` movement controller for horizontal movement, gravity, and grounded jumping. |
+| `scripts/PlayerController.cs.uid` | Godot UID sidecar for the C# player controller script. |
