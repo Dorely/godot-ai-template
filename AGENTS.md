@@ -31,6 +31,7 @@ This is a Godot demo repository used to test and refine an AI-assisted developme
 
 ## Godot AI MCP Workflow
 
+- Repo-scoped Codex skills live under `.agents/skills`; use `$godot-ai-mcp` for the reusable Godot MCP workflow guide.
 - Before scene or project mutations, check the editor state with the Godot AI MCP server.
 - If the project is running, stop it before editor-time scene edits unless the task is explicitly about runtime inspection.
 - Prefer MCP scene, node, resource, script, material, input-map, animation, and test tools over ad hoc file edits when operating on Godot-owned data.

@@ -1,0 +1,12 @@
+interface:
+  display_name: "Godot AI MCP"
+  short_description: "Godot editor workflows with MCP"
+  default_prompt: "Use $godot-ai-mcp to work safely in this Godot project with the Godot AI MCP server."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "godot-ai"
+      description: "Godot AI MCP server for live Godot editor automation"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:8000/mcp"

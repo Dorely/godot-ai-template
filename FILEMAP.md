@@ -24,6 +24,10 @@
 | Path | Description |
 |------|-------------|
 | `.codex/config.toml` | Local Codex MCP configuration for the Godot AI server at `http://127.0.0.1:8000/mcp`. |
+| `.agents/skills/godot-ai-mcp/` | Repo-scoped Codex skill for safe Godot editor work through the Godot AI MCP server. |
+| `.agents/skills/godot-ai-mcp/SKILL.md` | Skill trigger metadata and core workflow for Godot AI MCP usage. |
+| `.agents/skills/godot-ai-mcp/references/` | Focused reference docs for Godot project practices and MCP tool workflows. |
+| `.agents/skills/godot-ai-mcp/agents/openai.yaml` | Skill UI metadata and Godot AI MCP dependency declaration. |
 
 ## Godot AI Addon
 
