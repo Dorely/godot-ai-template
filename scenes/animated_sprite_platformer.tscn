@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dvu3tbvcckp5g" path="res://assets/sprites/player_x_spritesheet.png" id="3_cyw5y"]
 [ext_resource type="Script" uid="uid://ofumq6d81evn" path="res://scripts/PlayerSpriteAnimator.cs" id="4_ifuqa"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_estnm"]
-size = Vector2(32, 32)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jykg5"]
+size = Vector2(34, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hph8w"]
 size = Vector2(1280, 80)
@@ -38,7 +38,8 @@ position = Vector2(160, 560)
 script = ExtResource("1_hntv1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Player" unique_id=1037973860]
-shape = SubResource("RectangleShape2D_estnm")
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_jykg5")
 
 [node name="PlayerSprite" type="Sprite2D" parent="World/Player" unique_id=2038931650]
 z_index = 1

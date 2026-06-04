@@ -7,6 +7,8 @@ public partial class PlayerController : CharacterBody2D
     private static readonly StringName JumpAction = new("jump");
 
     private PlayerSpriteAnimator _spriteAnimator;
+    private bool _wasAirborne;
+    private bool _jumpConsumedForPress;
 
     [Export]
     public float MoveSpeed { get; set; } = 320.0f;
@@ -35,6 +37,10 @@ public partial class PlayerController : CharacterBody2D
         float direction = (float)Input.GetAxis(MoveLeftAction, MoveRightAction);
         velocity.X = direction * MoveSpeed;
         bool isJumpPressed = IsJumpPressed();
+        if (!isJumpPressed)
+        {
+            _jumpConsumedForPress = false;
+        }
 
         if (!IsOnFloor())
         {
@@ -48,17 +54,25 @@ public partial class PlayerController : CharacterBody2D
         Velocity = velocity;
         MoveAndSlide();
 
-        if (isJumpPressed && IsOnFloor())
+        bool isGrounded = IsOnFloor();
+        bool didLand = _wasAirborne && isGrounded;
+        bool didJump = false;
+
+        if (isJumpPressed && isGrounded && !_jumpConsumedForPress)
         {
             Vector2 jumpVelocity = Velocity;
             jumpVelocity.Y = JumpVelocity;
             Velocity = jumpVelocity;
+            isGrounded = false;
+            didJump = true;
+            _jumpConsumedForPress = true;
         }
 
-        UpdateSpriteAnimator(direction);
+        UpdateSpriteAnimator(direction, isGrounded, didLand, didJump);
+        _wasAirborne = !isGrounded;
     }
 
-    private void UpdateSpriteAnimator(float direction)
+    private void UpdateSpriteAnimator(float direction, bool isGrounded, bool didLand, bool didJump)
     {
         if (_spriteAnimator == null)
         {
@@ -67,13 +81,21 @@ public partial class PlayerController : CharacterBody2D
 
         _spriteAnimator.SetFacing(direction);
 
-        if (Velocity.Y < -0.01f)
+        if (didJump || Velocity.Y < -0.01f)
         {
             _spriteAnimator.SetState(PlayerSpriteAnimator.MotionState.Jump);
         }
-        else if (!IsOnFloor())
+        else if (!isGrounded)
         {
             _spriteAnimator.SetState(PlayerSpriteAnimator.MotionState.Fall);
+        }
+        else if (didLand)
+        {
+            _spriteAnimator.SetState(PlayerSpriteAnimator.MotionState.Land);
+        }
+        else if (_spriteAnimator.IsLandingActive)
+        {
+            return;
         }
         else if (Mathf.Abs(direction) > 0.01f)
         {
