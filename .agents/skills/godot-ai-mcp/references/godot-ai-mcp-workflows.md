@@ -19,13 +19,14 @@ Use this reference when operating through the Godot AI MCP server. Tool names re
 - Use `res://` paths for project files and resources.
 - Before setting a property, call `node_get_properties` or use a resource/class introspection tool. Godot property names often differ from intuition.
 - For resources assigned to node properties, use `resource_manage`, `material_manage`, or `node_set_property` with valid `res://` resource paths or supported inline resource dictionaries.
+- `node_set_property` may not coerce every complex Variant shape from JSON. If a property such as `Rect2` does not persist correctly, prefer runtime initialization, a resource-specific MCP tool, or a narrow scene-file patch after saving and understanding the editor reload/autosave state.
 - Use `batch_execute` for multi-step scene edits that should roll back together if a later step fails.
 
 ## Common Task Routes
 
 - **Create or edit a scene**: `scene_manage create` or `scene_open`, then `scene_get_hierarchy`, node tools, resource/material tools, `scene_save`, and hierarchy/property verification.
 - **Add nodes**: `node_create` for built-in node classes or PackedScene instancing; then set properties after inspecting valid names.
-- **Move or rename nodes**: `node_manage` with rename, reparent, duplicate, move, or delete operations.
+- **Move or rename nodes**: `node_manage` with rename, reparent, duplicate, move, or delete operations. The edited scene root cannot be renamed through `node_manage rename`; create the scene with the intended root name up front, or treat the scene file path as the stable identity.
 - **Create reusable resources**: `resource_manage create`, `material_manage create/apply_preset`, `theme_manage create`, or specialized resource helpers; assign with resource/material tools.
 - **Configure input**: `input_map_manage` for actions and bindings instead of hand-editing `project.godot`.
 - **Wire signals**: `signal_manage list/connect/disconnect` for scene connections.
@@ -34,22 +35,54 @@ Use this reference when operating through the Godot AI MCP server. Tool names re
 - **Add camera/audio/animation/particles**: use `camera_manage`, `audio_manage`, `animation_create`/`animation_manage`, and `particle_manage` so subresources and editor-visible settings are created correctly.
 - **Work with scripts**: use `script_create`, `script_patch`, and `script_manage` only for `.gd`. For C#, edit `.cs` files directly, let Godot import/build, then use `script_attach` if the script resource exists.
 
+## Asset Import And Resource Indexing
+
+- When moving a newly copied asset into `assets/`, check for and remove stale `.import` metadata left at the old path. Godot import sidecars should follow the source asset's final `res://` path.
+- `filesystem_manage(op="reimport")` can report success before the editor file system lists the moved file or before `resource_manage assign` can load it. If assignment returns `RESOURCE_NOT_FOUND`, verify with `filesystem_manage search` and `resource_manage search` before retrying assignment.
+- If MCP reimport does not generate the expected `.import` sidecar or resource index entry, run a real Godot import pass, then re-check the resource search:
+
+```powershell
+godot --headless --path . --import --quit
+```
+
+- On Windows, `godot` may not be on `PATH`. Use the connected editor PID from `session_manage(op="list")`, then locate the exact executable:
+
+```powershell
+Get-Process -Id <editor_pid> | Select-Object Path
+& '<path-to-godot-exe>' --headless --path . --import --quit
+```
+
+## Visual Asset Workflow
+
+- For spritesheets or atlases, inspect the source image and choose explicit frame rectangles before wiring the scene. Prefer a small preview crop or local image inspection over guessing from the full sheet.
+- Avoid fixed-size atlas regions when neighboring sprites are tightly packed unless the padding is known. Per-frame rectangles plus code-driven offsets often avoid bleeding adjacent art.
+- Use `editor_screenshot(source="game")` for final visual checks when materials, shaders, chroma-keying, sprite regions, filtering, or runtime `_Ready()` initialization affect the rendered result.
+
 ## C# Project Bootstrap
 
 - Before relying on C# scripts at runtime, check whether the project has `.csproj` and `.sln` files. If not, bootstrap them before runtime validation.
 - Match the `Godot.NET.Sdk` package version to the connected Godot editor version when creating or updating a C# project file.
 - Ensure `application/config/features` includes `C#`; use `project_manage settings_get/settings_set` instead of hand-editing `project.godot` when possible.
 - After adding or changing C# scripts, run the repo's C# build command, reimport the `.cs` files through `filesystem_manage`, and save affected scenes.
+- Build C# early after adding or substantially changing scripts, before extensive scene wiring. A fast `dotnet build` catches API mismatches while the scene state is still simple.
 - `script_attach` can succeed before the runtime assembly is loadable. Verify by running the scene and checking `game_manage get_node_info` for a non-null `script` property on nodes that should use C# scripts.
+- If a C# change builds and reimports but runtime behavior still looks stale, run an engine-side solution build and then re-run the scene:
+
+```powershell
+godot --headless --path . --build-solutions --quit
+```
+
+- If `godot` is not on `PATH`, use the editor executable discovered from the active MCP session as described in Asset Import And Resource Indexing.
 - Track Godot-generated `.cs.uid` sidecars with their corresponding `.cs` files unless repo-local guidance says otherwise.
 
 ## Runtime And Verification
 
 - For scene or resource edits, save with `scene_save` or the relevant project/resource tool, then verify with `scene_get_hierarchy`, `node_get_properties`, resource inspection, or a screenshot.
 - For runtime behavior, run with `project_run` in `current`, `main`, or `custom` mode as appropriate. Stop first if switching scenes.
+- If you manually patch a saved `.tscn` or `.tres` while the editor has that resource open, avoid autosaving over the patch. Use `project_run(autosave=false)` until the editor has been forced to reload the patched file, or re-open a different scene/resource and then the patched one.
 - Wait for `editor_state.game_capture_ready` before `game_manage` runtime inspection.
 - Use `game_manage get_scene_tree`, `get_node_info`, `get_ui_elements`, and input simulation for runtime validation.
-- MCP key simulation can be timing- and focus-sensitive, especially for code using `Input.is_action_just_pressed` / `Input.IsActionJustPressed`. Cross-check with `game_manage input_state`, runtime node inspection, or deterministic direct checks when needed.
+- MCP key simulation can be timing- and focus-sensitive, especially for code using `Input.is_action_just_pressed` / `Input.IsActionJustPressed`. Cross-check with `game_manage input_state`, raw key state via `editor_manage(op="game_eval")`, runtime node properties, or deterministic state setup before treating the gameplay code as broken.
 - `editor_manage game_eval` can time out on `await` if the game window is not focused. If that happens, restart the run if needed and prefer direct state inspection or short deterministic eval snippets.
 - Read logs with `logs_read(source="game")`, `logs_read(source="editor")`, or `logs_read(source="all")`. Use editor logs for parse/import/editor errors and game logs for runtime stdout/errors.
 - Use `editor_screenshot` with `source="viewport"` for editor 3D views, `source="cinematic"` for Camera3D scene rendering, and `source="game"` for the running game framebuffer.

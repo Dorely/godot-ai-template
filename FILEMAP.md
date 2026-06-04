@@ -69,7 +69,17 @@
 | Path | Description |
 |------|-------------|
 | `scenes/` | Project-owned Godot scenes. |
+| `scenes/animated_sprite_platformer.tscn` | Main playable 2D blockout scene using the spritesheet-backed animated player. |
 | `scenes/demo_platformer.tscn` | First playable 2D blockout scene with a cube player, floor, side walls, and three platforms. |
 | `scripts/` | Project-owned C# gameplay scripts. |
-| `scripts/PlayerController.cs` | `CharacterBody2D` movement controller for horizontal movement, gravity, and grounded jumping. |
+| `scripts/PlayerController.cs` | `CharacterBody2D` movement controller for horizontal movement, gravity, grounded jumping, and optional sprite animation state updates. |
 | `scripts/PlayerController.cs.uid` | Godot UID sidecar for the C# player controller script. |
+| `scripts/PlayerSpriteAnimator.cs` | `Sprite2D` atlas animator for the playable character's idle, run, jump, and fall frames. |
+| `scripts/PlayerSpriteAnimator.cs.uid` | Godot UID sidecar for the player sprite animator script. |
+| `assets/` | Project-owned source art and imported media. |
+| `assets/sprites/player_x_spritesheet.png` | Playable character spritesheet source asset used by the animated player scene. |
+| `assets/sprites/player_x_spritesheet.png.import` | Godot import metadata for the player spritesheet. |
+| `resources/` | Project-authored reusable Godot resources. |
+| `resources/materials/player_sprite_chroma_key.tres` | Shader material that removes the spritesheet's blue background for the player sprite. |
+| `resources/shaders/chroma_key_blue.gdshader` | CanvasItem chroma-key shader using the spritesheet's blue background color. |
+| `resources/shaders/chroma_key_blue.gdshader.uid` | Godot UID sidecar for the chroma-key shader. |

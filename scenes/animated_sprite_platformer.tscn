@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://c7buucyhl730k"]
+
+[ext_resource type="Script" uid="uid://bp5btc5ml2hri" path="res://scripts/PlayerController.cs" id="1_hntv1"]
+[ext_resource type="Material" uid="uid://c5qdb1b2xow40" path="res://resources/materials/player_sprite_chroma_key.tres" id="2_jykg5"]
+[ext_resource type="Texture2D" uid="uid://dvu3tbvcckp5g" path="res://assets/sprites/player_x_spritesheet.png" id="3_cyw5y"]
+[ext_resource type="Script" uid="uid://ofumq6d81evn" path="res://scripts/PlayerSpriteAnimator.cs" id="4_ifuqa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_estnm"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hph8w"]
+size = Vector2(1280, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nouop"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6tb7i"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3cjma"]
+size = Vector2(220, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6l5y0"]
+size = Vector2(220, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yfh4"]
+size = Vector2(240, 26)
+
+[node name="DemoPlatformer" type="Node2D" unique_id=1782533422]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1229216715]
+position = Vector2(640, 360)
+
+[node name="World" type="Node2D" parent="." unique_id=1408433359]
+
+[node name="Player" type="CharacterBody2D" parent="World" unique_id=218488037]
+position = Vector2(160, 560)
+script = ExtResource("1_hntv1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Player" unique_id=1037973860]
+shape = SubResource("RectangleShape2D_estnm")
+
+[node name="PlayerSprite" type="Sprite2D" parent="World/Player" unique_id=2038931650]
+z_index = 1
+texture_filter = 1
+material = ExtResource("2_jykg5")
+position = Vector2(0, 16)
+scale = Vector2(2, 2)
+texture = ExtResource("3_cyw5y")
+centered = false
+offset = Vector2(-15.5, -35)
+region_enabled = true
+region_rect = Rect2(225, 28, 31, 35)
+script = ExtResource("4_ifuqa")
+
+[node name="Terrain" type="Node2D" parent="World" unique_id=687379015]
+
+[node name="Floor" type="StaticBody2D" parent="World/Terrain" unique_id=1156292635]
+position = Vector2(640, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/Floor" unique_id=248881489]
+shape = SubResource("RectangleShape2D_hph8w")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/Floor" unique_id=643119064]
+color = Color(0.18, 0.22, 0.27, 1)
+polygon = PackedVector2Array(-640, -40, 640, -40, 640, 40, -640, 40)
+
+[node name="LeftWall" type="StaticBody2D" parent="World/Terrain" unique_id=987258916]
+position = Vector2(20, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/LeftWall" unique_id=1994732576]
+shape = SubResource("RectangleShape2D_nouop")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/LeftWall" unique_id=1561745952]
+color = Color(0.18, 0.22, 0.27, 1)
+polygon = PackedVector2Array(-20, -360, 20, -360, 20, 360, -20, 360)
+
+[node name="RightWall" type="StaticBody2D" parent="World/Terrain" unique_id=145411996]
+position = Vector2(1260, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/RightWall" unique_id=1811077827]
+shape = SubResource("RectangleShape2D_6tb7i")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/RightWall" unique_id=1878032551]
+color = Color(0.18, 0.22, 0.27, 1)
+polygon = PackedVector2Array(-20, -360, 20, -360, 20, 360, -20, 360)
+
+[node name="PlatformLow" type="StaticBody2D" parent="World/Terrain" unique_id=1164141924]
+position = Vector2(360, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/PlatformLow" unique_id=1743353105]
+shape = SubResource("RectangleShape2D_3cjma")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/PlatformLow" unique_id=726820590]
+color = Color(0.38, 0.46, 0.53, 1)
+polygon = PackedVector2Array(-110, -13, 110, -13, 110, 13, -110, 13)
+
+[node name="PlatformMid" type="StaticBody2D" parent="World/Terrain" unique_id=1113901031]
+position = Vector2(650, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/PlatformMid" unique_id=96876533]
+shape = SubResource("RectangleShape2D_6l5y0")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/PlatformMid" unique_id=1699508925]
+color = Color(0.38, 0.46, 0.53, 1)
+polygon = PackedVector2Array(-110, -13, 110, -13, 110, 13, -110, 13)
+
+[node name="PlatformHigh" type="StaticBody2D" parent="World/Terrain" unique_id=471228569]
+position = Vector2(960, 380)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Terrain/PlatformHigh" unique_id=1766481580]
+shape = SubResource("RectangleShape2D_6yfh4")
+
+[node name="Visual" type="Polygon2D" parent="World/Terrain/PlatformHigh" unique_id=1775403302]
+color = Color(0.38, 0.46, 0.53, 1)
+polygon = PackedVector2Array(-120, -13, 120, -13, 120, 13, -120, 13)

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="demo-platformer"
-run/main_scene="res://scenes/demo_platformer.tscn"
+run/main_scene="res://scenes/animated_sprite_platformer.tscn"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

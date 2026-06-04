@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c5qdb1b2xow40"]
+
+[ext_resource type="Shader" path="res://resources/shaders/chroma_key_blue.gdshader" id="1_iv8p0"]
+
+[resource]
+shader = ExtResource("1_iv8p0")
+shader_parameter/key_color = Color(0.196078, 0.376471, 0.65098, 1)
+shader_parameter/tolerance = 0.01
